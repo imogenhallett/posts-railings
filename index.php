@@ -15,11 +15,11 @@
     <h2>How many posts/railings do you have?</h2>
     <div>
         <label for="posts">Posts</label>
-        <input type="text" id="posts" name="posts"/>
+        <input type="number" id="posts" name="posts"/>
     </div>
     <div>
-        <label for="railings">Railings</label>
-        <input type="text" id="railings" name="railings"/>
+        <label for="rails">Railings</label>
+        <input type="number" id="rails" name="rails"/>
     </div>
     <div>
         <input type="submit" value="Calculate"/>
