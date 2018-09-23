@@ -10,13 +10,8 @@
 </head>
 <body>
 <?php
-    $validateArray = validateArray($_POST);
-    if(!$validateArray['status']) {
-        echo 'Error! Invalid input. Please enter an integer value, greater than 0, for the number of posts and the number of rails';
-    }else{
-        $railings = calculateLength($_POST);
-        echo $railings['message'];
-    }//end validate if
+    $railings = calculateLength($_POST);
+    echo $railings['message'];
 ?>
 </body>
 </html>

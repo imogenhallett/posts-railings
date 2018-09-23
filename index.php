@@ -7,9 +7,14 @@
 <body>
 <h1>Posts and railings</h1>
 
+
 <form action="length.php" method="post" target="_self">
-    <label>How long would you like your fence to be?</label>
+    <label for="length">How long would you like your fence to be (in meters)?</label>
+    <input type="text" id="length" name="length"/>
+    <input type="submit" value="Calculate"/>
 </form>
+
+<hr>OR<hr>
 
 <form action="posts-railings.php" method="post" target="_self">
     <h2>How many posts/railings do you have?</h2>

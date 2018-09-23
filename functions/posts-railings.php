@@ -15,14 +15,7 @@ function validateArray($railings) {
     //array validates - return $railings with a status key set to true
     $railings['status'] = true;
     return $railings;
-}
-
-function validateFormData($post) {
-    if(!isset($post['posts']) || !isset($post['rails'])) {
-        return false;
-    }
-    return true;
-}//end validateFormData()
+}//end validateArray()
 
 function validateIntValues($railings) {
     $posts = floatval($railings['posts']);
@@ -92,7 +85,7 @@ function checkMinReqs($railings) {
 
     //everything has passed - return the $railings array unchanged
     return $railings;
-}
+}//end checkMinReqs
 
 function doCalculation($railings) {
     //check $railings is valid array with correct keys (again)
@@ -146,26 +139,48 @@ function doCalculation($railings) {
                                 That means you will have ' . $postsLeftOver . ' post(s) left over and 0 rail(s) left over.'
         ];
         return $returnValues;
-
     }
+}//end doCalculation
 
-}
+//function calculateLength($railings) {
+//    $railings = validateIntValues($railings);
+//    if($railings['status']) {//if railings i.e $_POST has passed basic validation check min length requirements
+//        $checkMinReqs = checkMinReqs($railings);
+//        if($checkMinReqs['status']){//if checkMinReqs passes then calculate the railings
+//            $calculation = doCalculation($checkMinReqs);
+//            return $calculation;//success
+//        }else{
+//            return $checkMinReqs;//does not have enough rails or posts
+//        }
+//    } else {
+//        return $railings;//does not contain integers
+//    }
+//}//end calculateLength()
+
 
 function calculateLength($railings) {
-    $railings = validateIntValues($railings);
+    $railings = validateArray($railings);
+    if($railings['status']){//if railings is an array with correct keys
 
-    if($railings['status']) {//if railings i.e $_POST has passed basic validation check min length requirements
-        $checkMinReqs = checkMinReqs($railings);
-        if($checkMinReqs['status']){//if checkMinReqs passes then calculate the railings
-            $calculation = doCalculation($checkMinReqs);
-            return $calculation;
-        }else{
-            return $checkMinReqs;
+        $railings = validateIntValues($railings);
+        if($railings['status']) {//if railings has passed basic array validation check for int values
+
+            $checkMinReqs = checkMinReqs($railings);
+            if($checkMinReqs['status']){//if checkMinReqs passes then calculate the railings
+
+                $calculation = doCalculation($checkMinReqs);
+                return $calculation;//success - we have a success message to output
+
+            }else{
+                return $checkMinReqs;//does not have enough rails or posts
+            }
+        } else {
+            return $railings;//does not contain integers
         }
-    } else {
-        return $railings;
+    }else{
+        return $railings;//is not an array
     }
+}//end calculateLength()
 
-}
 
 ?>
