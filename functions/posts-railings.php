@@ -2,8 +2,14 @@
 
 define('POST_LENGTH',0.1);
 define('RAIL_LENGTH', 1.5);
-
-function validateArray($railings) {
+/*
+ * validates that the parameter is an array with expected keys
+ *
+ * @param array $railings the array to validate
+ *
+ * @return array if array validates return the original array with an extra key of status true, if false an array with status false and error message to display
+ */
+function validateArray(array $railings):array {
     //check $railings is valid array with correct keys
     if((gettype($railings) != 'array') || (!array_key_exists('posts', $railings) || !array_key_exists('rails', $railings)) ){
         $returnValues = [
