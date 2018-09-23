@@ -10,8 +10,8 @@
 </head>
 <body>
 <?php
-    $railings = calculateLength($_POST);
-    echo $railings['message'];
+    $fence = calculateLength($_POST);
+    echo $fence['message'];
 ?>
 </body>
 </html>
