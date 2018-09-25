@@ -10,8 +10,7 @@
 </head>
 <body>
 <?php
-    $fence = calculateLength($_POST);
-    echo $fence['message'];
+    echo $fence = calculateLength($_POST);
 ?>
 </body>
 </html>

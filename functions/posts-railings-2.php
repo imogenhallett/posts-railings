@@ -5,137 +5,77 @@ define('RAIL_LENGTH', 1.5);
 /*
  * validates that the parameter is an array with expected keys
  *
- * @param array $railings the array to validate
+ * @param array $fence the array containing posts and rails
  *
- * @return array if array validates return the original array with an extra key of status true, if false an array with status false and error message to display
+ * @return bool if array has correct keys then return true if not return false
  */
-function validateArray(array $railings):array {
-    //check $railings is valid array with correct keys
-    if((gettype($railings) != 'array') || (!array_key_exists('posts', $railings) || !array_key_exists('rails', $railings)) ){
-        $returnValues = [
-            'status' => false,
-            'message' => 'ERROR! You have entered an invalid selection. Programme requires valid data type to execute.'
-        ];
-        return $returnValues;
+function validateArray(array $fence):bool {
+    if(!array_key_exists('posts', $fence) || !array_key_exists('rails', $fence) ){
+        return false;
     }
-    //array validates - return $railings with a status key set to true
-    $railings['status'] = true;
-    return $railings;
-}//end validateArray()
+    return true;
+}
 
 /*
- * validates if $railings is an array and calculates if the values of array (posts and rails) are valid integers or not
+ * validates if $fence array contains integers
  *
- * @param $railings the array to validate that holds the rails and posts values
+ * @param array $fence the array containing posts and rails
  *
- * @return array if it passes all tests return the original array with a status key of true, if it fails the tests return and array with status key of false
+ * @return bool return true if rails and posts are integer values otherwise return false
  */
-function validateIntValues(array $railings):array {
+function validateInt(array $fence):bool {
 
-    $railings = validateArray($railings);
-    if (!$railings['status']){
-        return $railings;
+    $posts = $fence['posts'];
+    $rails = $fence['rails'];
+
+    if($posts != intval($posts) || $rails != intval($rails)) {
+        return false;
     }
+    return true;
+}
 
-    //$railings is a valid array with correct keys so assign the variables
-    $posts = floatval($railings['posts']);
-    $rails = floatval($railings['rails']);
-
-    //if casting to a float = 0 we cannot calculate the railings ($railings maybe a string or a 0 value) - set status to false
-    if ($posts == 0 || $rails == 0) {
-        $returnValues = [
-            'status' => false,
-            'message' => 'ERROR! You have entered an invalid selection. Please enter an integer value, greater than 0, for the number of posts and the number of rails'
-        ];
-        return $returnValues;
-    }
-
-    //check if the $posts value is equivalent to an int, if it is, cast it to an integer
-    if($posts == intval($posts)) {
-        $posts = intval($posts);
-    }
-
-    //check if the $rails value is equivalent to an int, if it is, cast it to an integer
-    if($rails == intval($rails)) {
-        $rails = intval($rails);
-    }
-
-    //if either $posts or $rails are not integers set status to false
-    if(!is_int($posts) || !is_int($rails)) {
-        $returnValues = [
-            'status' => false,
-            'message' => 'ERROR! You have entered an invalid selection. Please enter an integer value, greater than 0, for the number of posts and the number of rails'
-        ];
-        return $returnValues;
-    }
-    //success - $post and $rails are integers - pass them back
-    $returnValues = [
-        'status' => true,
-        'posts'=> $posts,
-        'rails' => $rails,
-    ];
-    return $returnValues;
-}//end validateIntValues()
 /*
  * checks if the minimum number of posts (2) and rails (1) are present
  *
- * @param array $railings the array containing posts and rails
+ * @param array $fence the array containing posts and rails
  *
- * @return array contains either status false or if all conditions are true the original array values (posts and rails)
+ * @return bool true if we have enough rails and posts to make a fence, otherwise false
  */
-function checkMinReqs(array $railings):array {
-    //check $railings is valid array with correct keys
-    $railings = validateArray($railings);
-    if (!$railings['status']){
-        return $railings;
-    }
+function validateMinReq(array $fence):bool {
 
-    //$railings array exists and has correct keys - check for int key values (again)
-    $railings = validateIntValues($railings);
-    if (!$railings['status']){
-        return $railings;
-    }
+    $rails = intval($fence['rails']);
+    $posts = intval($fence['posts']);
 
-    //the array exists, has the correct keys and keys have int values
-    $rails = $railings['rails'];
-    $posts = $railings['posts'];
-
-    // now check if they are greater than the min amount of posts/rails required
     if($rails === 0 || $posts < 2) {
-        $returnValues = [
-            'status' => false,
-            'message' => 'ERROR! You have entered an invalid selection. Programme requires a min of 1 rail and 2 posts.'
-        ];
-        return $returnValues;
+        return false;
     }
+    return true;
+}
 
-    //everything has passed - return the $railings array unchanged
-    return $railings;
-}//end checkMinReqs
+/* A function that calls all validation functions
+ *
+ * @param array $fence the array containing posts and rails
+ *
+ * @return bool true if array passes all validation tests, false if it fails any single test
+ */
+function doValidation(array $fence):bool {
+    if(!validateArray($fence) || !validateInt($fence) || !validateMinReq($fence)){
+        return false;
+    }
+    return true;
+}
 
 /*
  * calculates the length of a fence with the given number of posts and railings
  *
- * @param array $railings contains number of posts and rails
+ * @param array $fence contains number of posts and rails
  *
- * return array either an array with status false or an array with status true and the message to output
+ * return string the message to output
  */
-function doCalculation(array $railings):array {
-    //check $railings is valid array with correct keys (again)
-    $railings = validateArray($railings);
-    if (!$railings['status']){
-        return $railings;
-    }
+function doCalculation(array $fence):string {
 
-    //$railings array exists and has correct keys - check for int key values (again)
-    $railings = validateIntValues($railings);
-    if (!$railings['status']){
-        return $railings;
-    }
-
-    //the array exists, has the correct keys and keys have int values assign vars
-    $rails = $railings['rails'];
-    $posts = $railings['posts'];
+    $rails = $fence['rails'];
+    $posts = $fence['posts'];
 
     if($posts <= $rails) {
         $postsRequired = $posts;
@@ -146,14 +86,11 @@ function doCalculation(array $railings):array {
         $railsCalcLength = $railsRequired*RAIL_LENGTH;
         $totalLength = $postsCalcLength+$railsCalcLength;
 
-        $returnValues = [
-            'status' => true,
-            'message' => 'Congratulations you have enough materials to build a fence. <br/>  
+        $message = 'Congratulations you have enough materials to build a fence. <br/>  
                                 With ' . $rails . ' rails and ' . $posts . ' posts you can build a fence that is ' . $totalLength . '(meters)
                                 long.<br/> You will use ' . $railsRequired . ' rails and ' . $postsRequired . ' posts. <br/> 
-                                That means you will have ' . $railsLeftOver . ' rail(s) left over and 0 post(s) left over.'
-        ];
-        return $returnValues;
+                                That means you will have ' . $railsLeftOver . ' rail(s) left over and 0 post(s) left over.';
+        return $message;
 
     }else{ //when rails are < posts
         $railsRequired = $rails;
@@ -164,47 +101,28 @@ function doCalculation(array $railings):array {
         $railsCalcLength = $railsRequired*RAIL_LENGTH;
         $totalLength = $postsCalcLength+$railsCalcLength;
 
-        $returnValues = [
-            'status' => true,
-            'message' => 'Congratulations you have enough materials to build a fence. <br/>  
+        $message = 'Congratulations you have enough materials to build a fence. <br/>  
                                 With ' . $rails . ' rails and ' . $posts . ' posts you can build a fence that is ' . $totalLength . '(meters)
                                 long.<br/> You will use ' . $railsRequired . ' rails and ' . $postsRequired . ' posts. <br/> 
-                                That means you will have ' . $postsLeftOver . ' post(s) left over and 0 rail(s) left over.'
-        ];
-        return $returnValues;
+                                That means you will have ' . $postsLeftOver . ' post(s) left over and 0 rail(s) left over.';
+        return $message;
     }
-}//end doCalculation
+}
 
-function calculateLength($railings) {
-    $railings = validateArray($railings);
-    if($railings['status']){//if railings is an array with correct keys
-
-        $railings = validateIntValues($railings);
-        if($railings['status']) {//if railings has passed basic array validation check for int values
-
-            $checkMinReqs = checkMinReqs($railings);
-            if($checkMinReqs['status']){//if checkMinReqs passes then calculate the railings
-
-                $calculation = doCalculation($checkMinReqs);
-                return $calculation;//success - we have a success message to output
-
-            }else{
-                return $checkMinReqs;//does not have enough rails or posts
-            }
-        } else {
-            return $railings;//does not contain integers
-        }
+/*
+ * A function to validate form input - if input passes calculate the length of the fence you can make
+ *
+ * @param array $fence contains number of posts and rails
+ *
+ * return string the message to output
+ */
+function calculateLength(array $fence):string {
+    if(!doValidation($fence)){
+        $fence = 'Error! Invalid entry.  You require a minimum of 2 posts and 1 rail to make a fence.';
+        return $fence;
     }else{
-        return $railings;//is not an array
+        $fence = doCalculation($fence);
+        return $fence;
     }
-}//end calculateLength()
-
-
-
-//if (validateArray($railings) && NextFunction() ){
-
-//}
-
-
-
+}
 ?>
