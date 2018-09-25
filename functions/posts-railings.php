@@ -1,6 +1,6 @@
 <?php
 
-define('POST_LENGTH',0.1);
+define('POST_LENGTH', 0.1);
 define('RAIL_LENGTH', 1.5);
 /*
  * validates that the parameter is an array with expected keys
@@ -23,7 +23,21 @@ function validateArray(array $railings):array {
     return $railings;
 }//end validateArray()
 
-function validateIntValues($railings) {
+/*
+ * validates if $railings is an array and calculates if the values of array (posts and rails) are valid integers or not
+ *
+ * @param $railings the array to validate that holds the rails and posts values
+ *
+ * @return array if it passes all tests return the original array with a status key of true, if it fails the tests return and array with status key of false
+ */
+function validateIntValues(array $railings):array {
+
+    $railings = validateArray($railings);
+    if (!$railings['status']){
+        return $railings;
+    }
+
+    //$railings is a valid array with correct keys so assign the variables
     $posts = floatval($railings['posts']);
     $rails = floatval($railings['rails']);
 
@@ -62,8 +76,14 @@ function validateIntValues($railings) {
     ];
     return $returnValues;
 }//end validateIntValues()
-
-function checkMinReqs($railings) {
+/*
+ * checks if the minimum number of posts (2) and rails (1) are present
+ *
+ * @param array $railings the array containing posts and rails
+ *
+ * @return array contains either status false or if all conditions are true the original array values (posts and rails)
+ */
+function checkMinReqs(array $railings):array {
     //check $railings is valid array with correct keys
     $railings = validateArray($railings);
     if (!$railings['status']){
@@ -93,7 +113,14 @@ function checkMinReqs($railings) {
     return $railings;
 }//end checkMinReqs
 
-function doCalculation($railings) {
+/*
+ * calculates the length of a fence with the given number of posts and railings
+ *
+ * @param array $railings contains number of posts and rails
+ *
+ * return array either an array with status false or an array with status true and the message to output
+ */
+function doCalculation(array $railings):array {
     //check $railings is valid array with correct keys (again)
     $railings = validateArray($railings);
     if (!$railings['status']){
@@ -148,22 +175,6 @@ function doCalculation($railings) {
     }
 }//end doCalculation
 
-//function calculateLength($railings) {
-//    $railings = validateIntValues($railings);
-//    if($railings['status']) {//if railings i.e $_POST has passed basic validation check min length requirements
-//        $checkMinReqs = checkMinReqs($railings);
-//        if($checkMinReqs['status']){//if checkMinReqs passes then calculate the railings
-//            $calculation = doCalculation($checkMinReqs);
-//            return $calculation;//success
-//        }else{
-//            return $checkMinReqs;//does not have enough rails or posts
-//        }
-//    } else {
-//        return $railings;//does not contain integers
-//    }
-//}//end calculateLength()
-
-
 function calculateLength($railings) {
     $railings = validateArray($railings);
     if($railings['status']){//if railings is an array with correct keys
@@ -187,6 +198,13 @@ function calculateLength($railings) {
         return $railings;//is not an array
     }
 }//end calculateLength()
+
+
+
+//if (validateArray($railings) && NextFunction() ){
+
+//}
+
 
 
 ?>
