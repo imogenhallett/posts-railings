@@ -1,5 +1,5 @@
 <?php
-    include_once('functions/posts-railings-2.php');
+    include_once('functions/posts-railings.php');
 ?>
 
 <!DOCTYPE html>

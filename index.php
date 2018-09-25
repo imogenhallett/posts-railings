@@ -16,7 +16,7 @@
 
 <hr>OR<hr>
 
-<form action="posts-railings-2.php" method="post" target="_self">
+<form action="posts-railings.php" method="post" target="_self">
     <h2>How many posts/railings do you have?</h2>
     <div>
         <label for="posts">Posts</label>
