@@ -17,7 +17,7 @@ function validateArray(array $fence):bool {
 }
 
 /*
- * validates if $fence array contains integers
+ * validates if $fence array contains positive integers
  *
  * @param array $fence the array containing posts and rails
  *
@@ -28,7 +28,7 @@ function validateInt(array $fence):bool {
     $posts = $fence['posts'];
     $rails = $fence['rails'];
 
-    if($posts != intval($posts) || $rails != intval($rails)) {
+    if($posts != intval($posts) || $rails != intval($rails) || intval($posts)<=0 || intval($rails)<=0) {
         return false;
     }
     return true;
