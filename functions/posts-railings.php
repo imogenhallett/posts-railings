@@ -68,14 +68,12 @@ function doValidation(array $fence):bool {
 /*
  * calculates the length of a fence with the given number of posts and railings
  *
- * @param array $fence contains number of posts and rails
+ * @param int $posts contains number of posts to use
+ * @param int $rails contains the number of rails to use
  *
  * return string the message to output
  */
-function doCalculation(array $fence):string {
-
-    $rails = $fence['rails'];
-    $posts = $fence['posts'];
+function doCalculation(int $posts, int $rails):string {
 
     if($posts <= $rails) {
         $postsRequired = $posts;
@@ -121,7 +119,9 @@ function calculateLength(array $fence):string {
         $fence = 'Error! Invalid entry.  You require a minimum of 2 posts and 1 rail to make a fence.';
         return $fence;
     }else{
-        $fence = doCalculation($fence);
+        $posts = $fence['posts'];
+        $rails = $fence['rails'];
+        $fence = doCalculation($posts, $rails);
         return $fence;
     }
 }
