@@ -3,7 +3,7 @@ require ('../../functions/posts-railings.php');
 
 use PHPUnit\Framework\TestCase;
 
-class PostsRailings extends TestCase {
+class Length extends TestCase {
     public $fence = [
         'posts' => 2,
         'rails' => 1

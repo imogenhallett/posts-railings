@@ -12,7 +12,7 @@ function validateFloat(array $fence):bool {
     return true;
 }
 
-function doCalculation(float $length) {
+function doCalculation(float $length):string {
 
     $rails = ceil(($length-1.7)/1.6)+1;
     $posts = $rails + 1;
@@ -21,7 +21,7 @@ function doCalculation(float $length) {
     $railsCalcLength = $rails*RAIL_LENGTH;
     $totalLength = $postsCalcLength+$railsCalcLength;
 
-    return 'To make a fence '.$length.' meters long you will require <br/>' .$posts . ' posts and ' . $rails . ' rails. <br/>
+    return 'To make a fence '.$length.' meters long you will require: <br/>' .$posts . ' posts and ' . $rails . ' rails. <br/>
     The total length of your fence will be ' . $totalLength .' meters';
 }
 
@@ -30,7 +30,7 @@ function returnLength(array $fence) {
         return 'Error! Invalid input.  Please enter a positive value to calculate requirements';
     } else {
         $length = floatval($fence['length']);
-        echo doCalculation($length);
+        return doCalculation($length);
     }
 }
 
