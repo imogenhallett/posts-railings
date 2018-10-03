@@ -10,7 +10,7 @@
 </head>
 <body>
 <?php
-    echo 'something goes here';
+    echo returnLength($_POST);
 ?>
 </body>
 </html>
