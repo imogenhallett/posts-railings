@@ -21,25 +21,17 @@ function doCalculation(float $length) {
     $railsCalcLength = $rails*RAIL_LENGTH;
     $totalLength = $postsCalcLength+$railsCalcLength;
 
-
-
-    return 'rails: ' . $rails . ' / posts:' . $posts . ' / total length: ' . $totalLength;
-
-
-
-
+    return 'To make a fence '.$length.' meters long you will require <br/>' .$posts . ' posts and ' . $rails . ' rails. <br/>
+    The total length of your fence will be ' . $totalLength .' meters';
 }
 
 function returnLength(array $fence) {
-
     if(!validateFloat($fence)) {
         return 'Error! Invalid input.  Please enter a positive value to calculate requirements';
     } else {
         $length = floatval($fence['length']);
         echo doCalculation($length);
     }
-
-
 }
 
 ?>
