@@ -9,6 +9,8 @@ class Length extends TestCase {
         'length' => 8.1,
     ];
 
+    public $lengthFloat = 8.1;
+
     //test validateFloat()
 
     public function test_validateFloat_success() {
@@ -47,5 +49,30 @@ class Length extends TestCase {
     }
 
     //test doCalculation()
+
+    public function test_doCalculation_success() {
+        $doCalculation = doCalculation($this->lengthFloat);
+        $this->assertContains('To make a fence 8.1 meters long you will require:', $doCalculation);
+    }
+
+    public function test_doCalculation_success_string() {
+        $lengthFloat = '8.1';
+        $doCalculation = doCalculation($lengthFloat);
+        $this->assertContains('To make a fence 8.1 meters long you will require:', $doCalculation);
+    }
+
+
+    public function test_doCalculation_fail_zero() { //will never run with $lengthFloat = 0 due to proceeding if
+        $lengthFloat = 0;
+        $doCalculation = doCalculation($lengthFloat);
+        $this->assertContains('To make a fence 0 meters long you will require:', $doCalculation);
+    }
+
+    public function test_doCalculation_malformed() {
+        $lengthFloat = [];
+        $this->expectException(TypeError::class);
+        $validateFloat = doCalculation($lengthFloat);
+    }
+
 
 }//end class Length
